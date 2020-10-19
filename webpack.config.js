@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const sourceFolder = path.join(__dirname, 'src');
 const distFolder = path.resolve(__dirname, 'dist');
@@ -17,7 +18,9 @@ module.exports = {
     path: distFolder,
   },
   resolve: {
-    extensions: ['.ts', '.js', '.scss', '.css']
+    extensions: ['.ts', '.js', '.scss', '.css'],
+    plugins: [new TsconfigPathsPlugin()],
+    modules: [path.resolve(__dirname, 'node_modules'), 'node_modules']
   },
   module: {
     rules:  [
@@ -54,5 +57,5 @@ module.exports = {
       }
     ),
     new webpack.HotModuleReplacementPlugin()
-  ],
+  ]
 };

@@ -22,12 +22,13 @@
   "devDependencies": {
     "clean-webpack-plugin": "*",
     "copy-webpack-plugin": "*",
+    "css-loader": "*",
     "dart-sass": "*",
     "html-webpack-plugin": "*",
     "sass-loader": "*",
-    "css-loader": "*",
     "style-loader": "*",
     "ts-loader": "*",
+    "tsconfig-paths-webpack-plugin": "*",
     "webpack": "*",
     "webpack-cli": "*",
     "webpack-dev-server": "*"
