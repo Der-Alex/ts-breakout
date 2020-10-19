@@ -1,0 +1,14 @@
+* {
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#app {
+  width: 800px;
+  height: 600px;
+  border: 1px solid #333;
+}
