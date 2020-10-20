@@ -1,5 +1,6 @@
 import Pad from '@/components/pad';
 import InputHandler from '@/components/inputHandler';
+import Ball from '@/components/ball';
 
 class Game {
   constructor(
@@ -8,8 +9,9 @@ class Game {
   private gameWidth: number = 1280,
   private gameHeight: number = 720,
   private lastTime: number = 0,
-  private pad: Pad = new Pad(gameWidth, gameHeight)) {}
-  
+  private pad: Pad = new Pad(gameWidth, gameHeight),
+  private ball: Ball = new Ball()) {}
+
   gameLoop = (timeStamp: number) => {
     let deltaTime: number = timeStamp - this.lastTime;
     
@@ -17,13 +19,14 @@ class Game {
     this.context.clearRect(0, 0, this.gameWidth, this.gameHeight);
     this.pad.update(deltaTime);
     this.pad.draw(this.context);
+    this.ball.draw(this.context);
+
     requestAnimationFrame(this.gameLoop);
   }
-  
+
   start() {
     this.gameLoop(0);
     new InputHandler(this.pad);
   }
-  
 }
 new Game().start();

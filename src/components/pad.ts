@@ -26,9 +26,8 @@ export default class Pad extends Drawable {
   }
   
   update(deltaTime: number) {
-    if (deltaTime === 0) {
-      return;
-    }
+    super.update(deltaTime);
+    
     if (this.isMouse) {
       this.position.x = this.mouseX - (this.width / 2);
     } else {
