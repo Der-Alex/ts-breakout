@@ -1,5 +1,6 @@
 import { PositionInterface } from '@/interfaces/position.interface';
 import { Drawable } from '@/abstracts/drawable';
+import Game from '@/components/game';
 
 export default class Pad extends Drawable {
   width: number;
@@ -11,13 +12,13 @@ export default class Pad extends Drawable {
   mouseX: number = 0;
   isMouse: boolean = false;
   
-  constructor(private gameWidth: number, private gameHeight: number) {
+  constructor(private game: Game) {
     super();
     this.width = 100;
     this.height = 32;
     this.position = {
-      x: (this.gameWidth / 2) - (this.width / 2),
-      y: this.gameHeight - this.height - 10
+      x: (this.game.gameWidth / 2) - (this.width / 2),
+      y: this.game.gameHeight - this.height - 10
     };
     this.padImage = <HTMLImageElement>document.getElementById('pad');
     this.speed = 0;
@@ -38,8 +39,8 @@ export default class Pad extends Drawable {
     if (this.position.x < 0) {
       this.position.x = 0;
     }
-    if (this.position.x > this.gameWidth - this.width) {
-      this.position.x = this.gameWidth - this.width;
+    if (this.position.x > this.game.gameWidth - this.width) {
+      this.position.x = this.game.gameWidth - this.width;
     }
   }
   

@@ -16,6 +16,13 @@ export default class InputHandler {
           ball.moveRight();
         }
       }
+      if (event.key === ' ') {
+        if (ball.ballState === BallState.onPad) {
+          ball.shoot();
+        } else {
+          ball.land();
+        }
+      }
     });
     document.addEventListener('keyup', (event: KeyboardEvent) => {
       if (event.key === 'ArrowLeft' && pad.speed < 0) {

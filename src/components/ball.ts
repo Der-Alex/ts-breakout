@@ -1,5 +1,6 @@
 import { Drawable } from '@/abstracts/drawable';
 import { PositionInterface } from '@/interfaces/position.interface';
+import Game from '@/components/game';
 
 export enum BallState {
   moving,
@@ -10,23 +11,26 @@ export default class Ball extends Drawable {
   width: number;
   height: number;
   position: PositionInterface;
-  speed: number;
-  maxSpeed: number = 15;
+  padSpeed: number;
+  maxPadSpeed: number = 15;
+  ballSpeed: { x: number ,y: number } = {
+    x: 4, y: 4
+  };
   mouseX: number = 0;
   isMouse: boolean = false;
   ballImage!: HTMLImageElement;
   ballState: BallState = BallState.onPad
   
   
-  constructor(private gameWidth: number, private gameHeight: number) {
+  constructor(private game: Game) {
     super();
     this.width = 16;
     this.height = 16;
-    this.speed = 0;
+    this.padSpeed = 0;
     this.ballImage = <HTMLImageElement>document.getElementById('ball');
     this.position = {
-      x: (this.gameWidth / 2) - (this.width / 2),
-      y: this.gameHeight - this.height - 42
+      x: (this.game.gameWidth / 2) - (this.width / 2),
+      y: this.game.gameHeight - this.height - 42
     };
   }
   
@@ -43,23 +47,53 @@ export default class Ball extends Drawable {
       if (this.isMouse) {
         this.position.x = this.mouseX - (this.width / 2);
       } else {
-        this.position.x += this.speed;
+        this.position.x += this.padSpeed;
       }
       if (this.position.x < 50 - (this.width / 2)) {
         this.position.x = 50 - (this.width / 2);
       }
-      if (this.position.x > this.gameWidth - 50 - (this.width / 2)) {
-        this.position.x = this.gameWidth - 50 - (this.width / 2);
+      if (this.position.x > this.game.gameWidth - 50 - (this.width / 2)) {
+        this.position.x = this.game.gameWidth - 50 - (this.width / 2);
       }
+    } else {
+      this.position.x += this.ballSpeed.x;
+      this.position.y += this.ballSpeed.y;
+      this.checkAppCollision();
+    }
+  }
+  shoot() {
+    this.ballSpeed = { x: 4, y: -4 };
+    this.ballState = BallState.moving;
+  }
+  land() {
+    // TODO: Fix position
+    this.ballState = BallState.onPad;
+    this.position = {
+      x: (this.game.gameWidth / 2) - (this.width / 2),
+      y: this.game.gameHeight - this.height - 42
+    };
+  }
+  checkAppCollision() {
+    if (this.position.x <= 0) {
+      this.ballSpeed.x = 4 ;
+    }
+    if (this.position.x >= this.game.gameWidth - this.width) {
+      this.ballSpeed.x = -4;
+    }
+    if (this.position.y <= 0) {
+      this.ballSpeed.y = 4;
+    }
+    if (this.position.y >= this.game.gameHeight - this.height) {
+      this.ballSpeed.y  = -4;
     }
   }
   moveLeft() {
     this.isMouse = false;
-    this.speed = -this.maxSpeed;
+    this.padSpeed = -this.maxPadSpeed;
   }
   moveRight() {
     this.isMouse = false;
-    this.speed = this.maxSpeed;
+    this.padSpeed = this.maxPadSpeed;
   }
   moveX(positionX: number) {
     if (!this.isMouse) {
@@ -69,6 +103,6 @@ export default class Ball extends Drawable {
   }
   
   stop() {
-    this.speed = 0;
+    this.padSpeed = 0;
   }
 };
