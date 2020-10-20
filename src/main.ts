@@ -10,7 +10,7 @@ class Game {
   private gameHeight: number = 720,
   private lastTime: number = 0,
   private pad: Pad = new Pad(gameWidth, gameHeight),
-  private ball: Ball = new Ball()) {}
+  private ball: Ball = new Ball(gameWidth, gameHeight)) {}
 
   gameLoop = (timeStamp: number) => {
     let deltaTime: number = timeStamp - this.lastTime;
@@ -18,6 +18,7 @@ class Game {
     this.lastTime = timeStamp;
     this.context.clearRect(0, 0, this.gameWidth, this.gameHeight);
     this.pad.update(deltaTime);
+    this.ball.update(deltaTime);
     this.pad.draw(this.context);
     this.ball.draw(this.context);
 
@@ -26,7 +27,7 @@ class Game {
 
   start() {
     this.gameLoop(0);
-    new InputHandler(this.pad);
+    new InputHandler(this.pad, this.ball);
   }
 }
 new Game().start();
