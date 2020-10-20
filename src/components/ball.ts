@@ -14,6 +14,7 @@ export default class Ball extends Drawable {
   padSpeed: number;
   maxPadSpeed: number = 15;
   /**
+   * Ball speed x: right = + left = -, y: up = - down = +
    * Possible speeds should be
    * 0: -16,
    * 2: -14,
@@ -23,7 +24,7 @@ export default class Ball extends Drawable {
    * 16:  -4
    */
   ballSpeed: { x: number ,y: number } = {
-    x: 0, y: 6
+    x: 0, y: -6
   };
   mouseX: number = 0;
   isMouse: boolean = false;
@@ -68,10 +69,11 @@ export default class Ball extends Drawable {
       this.position.x += this.ballSpeed.x;
       this.position.y += this.ballSpeed.y;
       this.checkAppCollision();
+      this.checkPadCollision();
     }
   }
   shoot() {
-    this.ballSpeed = { x: 16 , y: -4 };
+    this.ballSpeed = { x: 4 , y: -12 };
     this.ballState = BallState.moving;
   }
   land() {
@@ -86,10 +88,99 @@ export default class Ball extends Drawable {
     if (this.position.x <= 0 || this.position.x >= this.game.gameWidth - this.width) {
       this.ballSpeed.x *= -1 ;
     }
-    if (this.position.y <= 0 || this.position.y >= this.game.gameHeight - this.height) {
+    if (this.position.y <= 0) {
       this.ballSpeed.y *= -1;
     }
+    if (this.position.y >= this.game.gameHeight - this.height) {
+      this.land();
+    }
   }
+  checkPadCollision() {
+    const pad = this.game.pad;
+    const padTop: number = pad.position.y;
+    const padLeft: number = pad.position.x;
+    const padRight: number = padLeft + pad.width;
+    const ballBottom: number = this.position.y + this.height;
+    const ballLeft: number = this.position.x;
+    const ballCenter: number = ballLeft + (this.width / 2);
+    const ballRight: number = ballLeft + this.width;
+    const areaWidth = Math.floor(pad.width / 13);
+    /**
+     * 1-13, default is middle (3)
+     */
+    let hitArea = 7;
+  
+    if (ballBottom > padTop) {
+      if (ballLeft < padRight && ballRight > padLeft) {
+        for (let i = 1; i < 13; i++) {
+          if (ballCenter <= padLeft + (areaWidth * i)) {
+            hitArea = i;
+            break;
+          }
+        }
+        
+        switch (hitArea) {
+          case 1:
+            this.ballSpeed.x = -16;
+            this.ballSpeed.y = -4;
+            break;
+          case 2:
+            this.ballSpeed.x = -14;
+            this.ballSpeed.y = -6;
+            break;
+          case 3:
+            this.ballSpeed.x = -12;
+            this.ballSpeed.y = -8;
+            break;
+          case 4:
+            this.ballSpeed.x = -8;
+            this.ballSpeed.y = -12;
+  
+            break;
+          case 5:
+            this.ballSpeed.x = -6;
+            this.ballSpeed.y = -14;
+  
+            break;
+          case 6:
+            this.ballSpeed.x = -4;
+            this.ballSpeed.y = -16;
+  
+            break;
+          case 7:
+            this.ballSpeed.x = 0;
+            this.ballSpeed.y = -16;
+            break;
+          case 8:
+            this.ballSpeed.x = 4;
+            this.ballSpeed.y = -16;
+            break;
+          case 9:
+            this.ballSpeed.x = 6;
+            this.ballSpeed.y = -14;
+            break;
+          case 10:
+            this.ballSpeed.x = 8;
+            this.ballSpeed.y = -12;
+            break;
+          case 11:
+            this.ballSpeed.x = 12;
+            this.ballSpeed.y = -8;
+            break;
+          case 12:
+            this.ballSpeed.x = 14;
+            this.ballSpeed.y = -6;
+            break;
+          case 13:
+            this.ballSpeed.x = 16;
+            this.ballSpeed.y = -4;
+            break;
+        }
+      }
+    }
+  }
+  
+  
   moveLeft() {
     this.isMouse = false;
     this.padSpeed = -this.maxPadSpeed;

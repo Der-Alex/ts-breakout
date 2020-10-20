@@ -14,7 +14,7 @@ export default class Pad extends Drawable {
   
   constructor(private game: Game) {
     super();
-    this.width = 100;
+    this.width = 130;
     this.height = 32;
     this.position = {
       x: (this.game.gameWidth / 2) - (this.width / 2),
