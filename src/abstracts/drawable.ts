@@ -5,8 +5,6 @@ export abstract class Drawable {
   abstract height: number;
   abstract position: PositionInterface
   
-  constructor() {
-  }
   draw(context: CanvasRenderingContext2D) {}
   update(deltaTime: number) {}
 }

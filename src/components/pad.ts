@@ -6,7 +6,10 @@ export default class Pad extends Drawable {
   height: number;
   position: PositionInterface;
   speed: number;
-  maxSpeed: number = 5;
+  maxSpeed: number = 15;
+  mouseX: number = 0;
+  isMouse: boolean = false;
+  
   constructor(private gameWidth: number, private gameHeight: number) {
     super();
     this.width = 150;
@@ -26,7 +29,11 @@ export default class Pad extends Drawable {
     if (deltaTime === 0) {
       return;
     }
-    this.position.x += this.speed;
+    if (this.isMouse) {
+      this.position.x = this.mouseX - (this.width / 2);
+    } else {
+      this.position.x += this.speed;
+    }
     if (this.position.x < 0) {
       this.position.x = 0;
     }
@@ -36,11 +43,20 @@ export default class Pad extends Drawable {
   }
   
   moveLeft() {
+    this.isMouse = false;
     this.speed = -this.maxSpeed;
   }
   moveRight() {
-    this.speed = this.maxSpeed;
+      this.isMouse = false;
+      this.speed = this.maxSpeed;
   }
+  moveX(amount: number) {
+    if (!this.isMouse) {
+      this.isMouse = true;
+    }
+    this.mouseX = amount;
+  }
+  
   stop() {
     this.speed = 0;
   }

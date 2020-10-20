@@ -1,8 +1,8 @@
 {
   "name": "ts-breakout",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A typescript based breakout game",
-  "main": "index.js",
+  "main": "main.ts",
   "scripts": {
     "start:dev": "webpack serve --color --progress"
   },

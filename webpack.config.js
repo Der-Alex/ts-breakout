@@ -10,7 +10,7 @@ const distFolder = path.resolve(__dirname, 'dist');
 module.exports = {
   mode: 'development',
   entry: [
-    './src/scripts/main.ts',
+    './src/main.ts',
     './src/styles/main.scss',
   ],
   output: {
@@ -36,7 +36,6 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
-              // Prefer `dart-sass`
               implementation: require('dart-sass'),
             },
           },
@@ -53,9 +52,9 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
     new HtmlWebpackPlugin({
-        template: './src/index.html'
-      }
-    ),
+      template: './public/index.html',
+      favicon: './public/favicon.ico'
+    }),
     new webpack.HotModuleReplacementPlugin()
   ]
 };
