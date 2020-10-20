@@ -13,8 +13,17 @@ export default class Ball extends Drawable {
   position: PositionInterface;
   padSpeed: number;
   maxPadSpeed: number = 15;
+  /**
+   * Possible speeds should be
+   * 0: -16,
+   * 2: -14,
+   * 4: -12,
+   * 8:  -8,
+   * 12: -6,
+   * 16:  -4
+   */
   ballSpeed: { x: number ,y: number } = {
-    x: 4, y: 4
+    x: 0, y: 6
   };
   mouseX: number = 0;
   isMouse: boolean = false;
@@ -62,7 +71,7 @@ export default class Ball extends Drawable {
     }
   }
   shoot() {
-    this.ballSpeed = { x: 4, y: -4 };
+    this.ballSpeed = { x: 16 , y: -4 };
     this.ballState = BallState.moving;
   }
   land() {
@@ -74,17 +83,11 @@ export default class Ball extends Drawable {
     };
   }
   checkAppCollision() {
-    if (this.position.x <= 0) {
-      this.ballSpeed.x = 4 ;
+    if (this.position.x <= 0 || this.position.x >= this.game.gameWidth - this.width) {
+      this.ballSpeed.x *= -1 ;
     }
-    if (this.position.x >= this.game.gameWidth - this.width) {
-      this.ballSpeed.x = -4;
-    }
-    if (this.position.y <= 0) {
-      this.ballSpeed.y = 4;
-    }
-    if (this.position.y >= this.game.gameHeight - this.height) {
-      this.ballSpeed.y  = -4;
+    if (this.position.y <= 0 || this.position.y >= this.game.gameHeight - this.height) {
+      this.ballSpeed.y *= -1;
     }
   }
   moveLeft() {
