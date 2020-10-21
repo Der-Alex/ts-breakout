@@ -2,6 +2,9 @@ import Brick from '@/components/brick';
 import Game from '@/components/game';
 
 export const level1: number[][] = [
+  [1],
+];
+export const level2: number[][] = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1 ,1 ,1 ,1, 1, 1, 1, 1, 1],
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1 ,1 ,1 ,1, 1, 1, 1, 1, 1],
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ,1, 1 ,1 ,1 ,1, 1, 1, 1, 1, 1],

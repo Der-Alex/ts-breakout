@@ -1,6 +1,7 @@
-import { Drawable } from '@/abstracts/drawable';
-import { PositionInterface } from '@/interfaces/position.interface';
+import {Drawable} from '@/abstracts/drawable';
+import {PositionInterface} from '@/interfaces/position.interface';
 import Game from '@/components/game';
+import {collisionDetection} from '@/components/collisionDetection';
 
 export enum BallState {
   moving,
@@ -23,7 +24,7 @@ export default class Ball extends Drawable {
    * 12: -6,
    * 16:  -4
    */
-  ballSpeed: { x: number ,y: number } = {
+  ballSpeed: { x: number, y: number } = {
     x: 0, y: -6
   };
   mouseX: number = 0;
@@ -51,6 +52,7 @@ export default class Ball extends Drawable {
   draw(context: CanvasRenderingContext2D) {
     context.drawImage(this.ballImage, this.position.x, this.position.y, this.width, this.height);
   }
+  
   update(deltaTime: number) {
     super.update(deltaTime);
     if (this.ballState === BallState.onPad) {
@@ -72,10 +74,12 @@ export default class Ball extends Drawable {
       this.checkPadCollision();
     }
   }
+  
   shoot() {
-    this.ballSpeed = { x: 4 , y: -12 };
+    this.ballSpeed = {x: 4, y: -12};
     this.ballState = BallState.moving;
   }
+  
   land() {
     // TODO: Fix position
     this.ballState = BallState.onPad;
@@ -84,9 +88,10 @@ export default class Ball extends Drawable {
       y: this.game.gameHeight - this.height - 42
     };
   }
+  
   checkAppCollision() {
     if (this.position.x <= 0 || this.position.x >= this.game.gameWidth - this.width) {
-      this.ballSpeed.x *= -1 ;
+      this.ballSpeed.x *= -1;
     }
     if (this.position.y <= 0) {
       this.ballSpeed.y *= -1;
@@ -95,100 +100,95 @@ export default class Ball extends Drawable {
       this.land();
     }
   }
+  
   checkPadCollision() {
     const pad = this.game.pad;
-    const padTop: number = pad.position.y;
     const padLeft: number = pad.position.x;
-    const padRight: number = padLeft + pad.width;
-    const ballBottom: number = this.position.y + this.height;
-    const ballLeft: number = this.position.x;
-    const ballCenter: number = ballLeft + (this.width / 2);
-    const ballRight: number = ballLeft + this.width;
+    const ballCenter: number = this.position.x + (this.width / 2);
     const areaWidth = Math.floor(pad.width / 13);
     /**
      * 1-13, default is middle (3)
      */
     let hitArea = 7;
-  
-    if (ballBottom > padTop) {
-      if (ballLeft < padRight && ballRight > padLeft) {
-        for (let i = 1; i < 13; i++) {
-          if (ballCenter <= padLeft + (areaWidth * i)) {
-            hitArea = i;
-            break;
-          }
+    
+    if (collisionDetection(this, pad) && this.ballState === BallState.moving) {
+      for (let i = 1; i < 13; i++) {
+        if (ballCenter <= padLeft + (areaWidth * i)) {
+          hitArea = i;
+          break;
         }
-        
-        switch (hitArea) {
-          case 1:
-            this.ballSpeed.x = -16;
-            this.ballSpeed.y = -4;
-            break;
-          case 2:
-            this.ballSpeed.x = -14;
-            this.ballSpeed.y = -6;
-            break;
-          case 3:
-            this.ballSpeed.x = -12;
-            this.ballSpeed.y = -8;
-            break;
-          case 4:
-            this.ballSpeed.x = -8;
-            this.ballSpeed.y = -12;
-  
-            break;
-          case 5:
-            this.ballSpeed.x = -6;
-            this.ballSpeed.y = -14;
-  
-            break;
-          case 6:
-            this.ballSpeed.x = -4;
-            this.ballSpeed.y = -16;
-  
-            break;
-          case 7:
-            this.ballSpeed.x = 0;
-            this.ballSpeed.y = -16;
-            break;
-          case 8:
-            this.ballSpeed.x = 4;
-            this.ballSpeed.y = -16;
-            break;
-          case 9:
-            this.ballSpeed.x = 6;
-            this.ballSpeed.y = -14;
-            break;
-          case 10:
-            this.ballSpeed.x = 8;
-            this.ballSpeed.y = -12;
-            break;
-          case 11:
-            this.ballSpeed.x = 12;
-            this.ballSpeed.y = -8;
-            break;
-          case 12:
-            this.ballSpeed.x = 14;
-            this.ballSpeed.y = -6;
-            break;
-          case 13:
-            this.ballSpeed.x = 16;
-            this.ballSpeed.y = -4;
-            break;
-        }
+      }
+      
+      switch (hitArea) {
+        case 1:
+          this.ballSpeed.x = -16;
+          this.ballSpeed.y = -4;
+          break;
+        case 2:
+          this.ballSpeed.x = -14;
+          this.ballSpeed.y = -6;
+          break;
+        case 3:
+          this.ballSpeed.x = -12;
+          this.ballSpeed.y = -8;
+          break;
+        case 4:
+          this.ballSpeed.x = -8;
+          this.ballSpeed.y = -12;
+          
+          break;
+        case 5:
+          this.ballSpeed.x = -6;
+          this.ballSpeed.y = -14;
+          
+          break;
+        case 6:
+          this.ballSpeed.x = -4;
+          this.ballSpeed.y = -16;
+          
+          break;
+        case 7:
+          this.ballSpeed.x = 0;
+          this.ballSpeed.y = -16;
+          break;
+        case 8:
+          this.ballSpeed.x = 4;
+          this.ballSpeed.y = -16;
+          break;
+        case 9:
+          this.ballSpeed.x = 6;
+          this.ballSpeed.y = -14;
+          break;
+        case 10:
+          this.ballSpeed.x = 8;
+          this.ballSpeed.y = -12;
+          break;
+        case 11:
+          this.ballSpeed.x = 12;
+          this.ballSpeed.y = -8;
+          break;
+        case 12:
+          this.ballSpeed.x = 14;
+          this.ballSpeed.y = -6;
+          break;
+        case 13:
+          this.ballSpeed.x = 16;
+          this.ballSpeed.y = -4;
+          break;
       }
     }
   }
-  
   
   moveLeft() {
     this.isMouse = false;
     this.padSpeed = -this.maxPadSpeed;
   }
+  
   moveRight() {
     this.isMouse = false;
     this.padSpeed = this.maxPadSpeed;
   }
+  
   moveX(positionX: number) {
     if (!this.isMouse) {
       this.isMouse = true;
